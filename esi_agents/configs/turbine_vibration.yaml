@@ -1,0 +1,23 @@
+adapter: csv
+params:
+  path: data/turbine.csv
+  timestamp_column: timestamp
+window:
+  size: 256
+  stride: 128
+features:
+  time: true
+  freq: true
+  envelope: true
+  orders: true
+models:
+  - name: isolation_forest
+    params:
+      n_estimators: 200
+      random_state: 42
+  - name: lof
+    params:
+      n_neighbors: 20
+  - name: hbos
+threshold: 0.9
+target_sampling_hz: 100

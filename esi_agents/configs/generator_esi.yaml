@@ -1,0 +1,24 @@
+training:
+  adapter: csv
+  params:
+    path: data/generator.csv
+    timestamp_column: timestamp
+  window:
+    size: 256
+    stride: 128
+  features:
+    time: true
+    freq: true
+    envelope: true
+    orders: true
+  models:
+    - name: isolation_forest
+    - name: ocsvm
+  threshold: 0.85
+stream:
+  adapter: mqtt
+  params:
+    host: localhost
+    port: 1883
+    topic: esi/generator
+    emit_interval_s: 0.1
