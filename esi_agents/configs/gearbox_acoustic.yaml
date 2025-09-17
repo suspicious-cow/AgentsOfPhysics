@@ -1,0 +1,16 @@
+adapter: csv
+params:
+  path: data/gearbox_acoustic.csv
+  timestamp_column: timestamp
+window:
+  size: 1024
+  stride: 512
+features:
+  time: true
+  freq: true
+  envelope: true
+  orders: false
+models:
+  - name: hbos
+  - name: isolation_forest
+threshold: 0.92

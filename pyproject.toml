@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esi-agents"
+version = "0.1.0"
+description = "Multi-agent anomaly detection platform for ESI data"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "statsmodels",
+    "matplotlib",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+stream = ["paho-mqtt", "python-opcua"]
+databases = ["influxdb-client", "psycopg2-binary"]
+torch = ["torch"]
+
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["esi_agents/tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["esi_agents"]
+exclude = ["data", "scripts", "evaluation_functions", "ai_agent"]
