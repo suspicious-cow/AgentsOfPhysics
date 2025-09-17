@@ -1,13 +1,13 @@
 # ESI Agents Platform
 
-A modular, multi-agent anomaly detection platform for electrical/signature/sensor (ESI) data from rotating machinery such as turbines, compressors, gearboxes and generators. The architecture mirrors the researcher → coder → reviewer workflow described in [Agents of Discovery (arXiv:2509.08535)](https://arxiv.org/abs/2509.08535) with orchestration, logic review and code review agents gating each run.
+A modular, multi-agent anomaly detection platform for electrical/signature/sensor (ESI) data from rotating machinery such as turbines, compressors, gearboxes and generators. The architecture mirrors the researcher -> coder -> reviewer workflow described in [Agents of Discovery (arXiv:2509.08535)](https://arxiv.org/abs/2509.08535) with orchestration, logic review and code review agents gating each run.
 
 ## Features
 
 - **Data adapters** for CSV, Parquet, SQLite demos and optional InfluxDB, TimescaleDB, MQTT and OPC-UA transports.
 - **Feature engineering** library providing time, frequency, envelope/demodulation and order-tracking features on sliding windows.
 - **Model zoo** with classical detectors (Isolation Forest, LOF, HBOS, One-Class SVM) and residual baselines (STL, ARIMA), plus an optional PyTorch autoencoder.
-- **Evaluation toolkit** computing ROC/PR metrics, SIC surrogate scans and bump-hunt style band scans with 512×512 plots.
+- **Evaluation toolkit** computing ROC/PR metrics, SIC surrogate scans and bump-hunt style band scans with 512x512 plots.
 - **Agents** implementing ingest, feature extraction, training, selection, evaluation, drift monitoring, batch/stream scoring and report writing with logic/code review gates.
 - **Workflows & CLIs** for batch pipelines, evaluation and streaming demos.
 - **Documentation & tests** covering adapters, features, models and evaluators on synthetic fixtures.
@@ -73,6 +73,39 @@ esi_agents/
 
 Generated artifacts (scores, plots, reports) are stored under `artifacts/` by default with timestamped subdirectories recommended for production deployments.
 
+## Docker
+
+Build the image (installs the dev extra by default):
+```bash
+docker build -t esi-agents .
+```
+
+Install optional extras at build time by overriding the `EXTRAS` argument:
+```bash
+docker build --build-arg EXTRAS="dev,stream,torch" -t esi-agents:stream .
+```
+
+Run the batch demo from the image (mount the repo so configs/data are available and artifacts persist locally):
+```bash
+# Linux / macOS
+docker run --rm -v "$(pwd):/app" -w /app esi-agents python -m esi_agents.cli.esi_batch --config esi_agents/configs/turbine_vibration.yaml --input data/turbine.csv --out artifacts/runs/turbine_demo --labels data/turbine_labels.csv
+
+# Windows PowerShell
+docker run --rm -v "${PWD}:/app" -w /app esi-agents python -m esi_agents.cli.esi_batch --config esi_agents/configs/turbine_vibration.yaml --input data/turbine.csv --out artifacts/runs/turbine_demo --labels data/turbine_labels.csv
+```
+
+Run the test suite inside the container:
+```bash
+docker run --rm -v "$(pwd):/app" -w /app esi-agents pytest
+```
+
+Use docker compose for a long-lived dev container (exposes the repo at `/app`):
+```bash
+docker compose up -d
+docker compose exec esi-agents python -m esi_agents.cli.esi_stream --config esi_agents/configs/generator_esi.yaml
+docker compose down
+```
+
 ## Development
 
 ```bash
@@ -84,4 +117,4 @@ The pytest suite covers adapter contracts, feature calculations, detector normal
 
 ## License
 
-MIT License © 2024 Contributors.
+MIT License (c) 2024 Contributors.

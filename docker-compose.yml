@@ -1,0 +1,13 @@
+services:
+  esi-agents:
+    build:
+      context: .
+      args:
+        EXTRAS: dev
+    image: esi-agents:latest
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    stdin_open: true
+    command: tail -f /dev/null

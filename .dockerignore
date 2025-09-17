@@ -1,0 +1,16 @@
+.git
+.vscode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info
+build/
+dist/
+artifacts/
+.mypy_cache/
+.pytest_cache/
+.env
+.env.*
+docker-compose.override.yml
