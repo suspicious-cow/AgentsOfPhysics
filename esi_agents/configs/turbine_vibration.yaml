@@ -1,0 +1,35 @@
+data:
+  source:
+    type: csv
+    params:
+      path: data/turbine.csv
+      read_csv_kwargs:
+        parse_dates:
+          - timestamp
+  target_sampling_rate_hz: 100
+  default_asset_id: turbine_1
+  default_channel: vibration_x
+features:
+  window_size: 256
+  stride: 128
+  rpm_column: rpm
+models:
+  candidates: [isolation_forest, lof, hbos, ocsvm]
+  train_ratio: 0.6
+  val_ratio: 0.2
+  params:
+    isolation_forest:
+      random_state: 42
+    ocsvm:
+      nu: 0.05
+stream:
+  source:
+    type: csv
+    params:
+      path: data/turbine.csv
+      read_csv_kwargs:
+        parse_dates:
+          - timestamp
+      delay: 0.0
+artifacts:
+  train_dir: artifacts/runs/turbine_stream_train

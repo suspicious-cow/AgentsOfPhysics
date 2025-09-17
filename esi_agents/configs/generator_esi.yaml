@@ -1,0 +1,31 @@
+data:
+  source:
+    type: csv
+    params:
+      path: data/turbine.csv
+      read_csv_kwargs:
+        parse_dates:
+          - timestamp
+  target_sampling_rate_hz: 100
+features:
+  window_size: 512
+  stride: 256
+  rpm_column: rpm
+models:
+  candidates: [isolation_forest, hbos]
+  train_ratio: 0.5
+  val_ratio: 0.25
+  params:
+    isolation_forest:
+      random_state: 1
+stream:
+  source:
+    type: csv
+    params:
+      path: data/turbine.csv
+      read_csv_kwargs:
+        parse_dates:
+          - timestamp
+      delay: 0.01
+artifacts:
+  train_dir: artifacts/runs/generator_stream_train

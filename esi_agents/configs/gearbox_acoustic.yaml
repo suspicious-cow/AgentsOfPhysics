@@ -1,0 +1,17 @@
+data:
+  source:
+    type: csv
+    params:
+      path: data/turbine.csv
+      read_csv_kwargs:
+        parse_dates:
+          - timestamp
+  default_channel: acoustic
+features:
+  window_size: 256
+  stride: 64
+  rpm_column: rpm
+models:
+  candidates: [stl_resid, arima_resid, isolation_forest]
+  train_ratio: 0.7
+  val_ratio: 0.2
